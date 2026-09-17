@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Design tokens (NewDesign.md §2, §4, §3) ──────────────────────────────── */
+:root {
+  /* Lab surface — dark instrument (§2) */
+  --lab-void: #10141a;
+  --lab-panel: #171d26;
+  --lab-panel-2: #1e2530;
+  --lab-line: #2b3542;
+  --lab-text: #c9d3e0;
+  --lab-text-dim: #7b8794;
+
+  /* Notebook surface — light graph-paper (§2) */
+  --paper: #edf1f5;
+  --paper-panel: #ffffff;
+  --paper-line: #dce3eb;
+  --ink: #161b22;
+  --ink-soft: #55606e;
+
+  /* Signal — duotone, semantic (§2) */
+  --signal: #3fc7b4; /* teal — your reasoning / measured / correct */
+  --signal-soft: #1f3a3b; /* teal low-intensity on dark */
+  --signal-ink: #0e6e64; /* teal readable on light paper */
+  --signal-wash: #e1f4f0; /* teal tint fill on light paper */
+  --gap: #ffa733; /* amber — the gap */
+  --gap-soft: #3a2a12; /* amber low-intensity on dark */
+  --gap-ink: #a85e0a; /* amber readable on light paper */
+  --gap-wash: #fcebd2; /* amber tint fill on light paper */
+
+  /* Radius hierarchy (§4) */
+  --r-canvas: 16px;
+  --r-panel: 12px;
+  --r-control: 8px;
+  --r-pill: 999px;
+
+  /* Spacing scale, 4px base (§4) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+
+  /* Type scale, base 16 / ratio ≈ 1.2 (§3) */
+  --fs-mono-sm: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-lead: 1.125rem;
+  --fs-h4: 1.375rem;
+  --fs-h3: 1.75rem;
+  --fs-h2: 2.25rem;
+  --fs-h1: 3.25rem;
+  --fs-hero: 4.5rem;
+
+  /* Legacy aliases — kept until components migrate off them (Phases 2–5),
+     then removed. Old names now point at the closest new token. */
+  --surface: var(--paper-panel);
+  --graphite: var(--ink-soft);
+  --line: var(--paper-line);
+  --signal-wk: var(--signal-wash);
+  --radius: var(--r-control);
+}
+
+body {
+  color: var(--ink);
+  background-color: var(--paper);
+  /* Faint graph-paper grid (§4) */
+  background-image:
+    linear-gradient(var(--paper-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--paper-line) 1px, transparent 1px);
+  background-size: 24px 24px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: var(--fs-base);
+  line-height: 1.5;
+}
+
+/* Serif display voice — tight tracking, snug leading (§3). */
+.font-display {
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+}
+
+/* Mono readouts align on the decimal (§3). */
+.tabular {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+
+/* Visible teal keyboard focus on every interactive element (§10). */
+:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* The faint measurement grid that can back a 2D sim region. */
+.measure-grid {
+  background-image:
+    linear-gradient(to right, var(--paper-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--paper-line) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: -1px -1px;
+}
+
+/* Mastery seal stamp — one orchestrated motion when a concept is complete (§6.10). */
+@keyframes stamp {
+  from {
+    opacity: 0;
+    transform: scale(1.8) rotate(-22deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(-8deg);
+  }
+}
+.animate-stamp {
+  animation: stamp 500ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* Live catalogue glyphs — motion answers action, so they run only on hover/focus (§6.9). */
+.live-glyph {
+  animation-play-state: paused;
+}
+.group:hover .live-glyph,
+.group:focus-visible .live-glyph,
+.group:focus-within .live-glyph {
+  animation-play-state: running;
+}
+@keyframes glyph-drift {
+  from {
+    transform: translateX(-5px);
+  }
+  to {
+    transform: translateX(6px);
+  }
+}
+@keyframes glyph-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes glyph-swing {
+  0%,
+  100% {
+    transform: rotate(-20deg);
+  }
+  50% {
+    transform: rotate(20deg);
+  }
+}
+@keyframes glyph-fall {
+  0% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
